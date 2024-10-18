@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FootList</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>FootList Events</h1>
+    
+    <button id="createEventButton">Create Event</button>
+    <div id="eventForm" style="display:none;">
+        <h2>Create a New Event</h2>
+        <form id="eventForm">
+            <input type="text" id="title" placeholder="Event Title" required>
+            <input type="date" id="date" required>
+            <input type="time" id="time" required>
+            <input type="text" id="location" placeholder="Event Location" required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <h2>Available Events</h2>
+    <ul id="eventsList"></ul>
+    <!-- add a loop to show a list of all available events : show title, date and time, location -->
+     
+
+    <script src="script.js"></script>
+</body>
+</html>
