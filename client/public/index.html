@@ -1,31 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FootList</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <h1>FootList Events</h1>
-    
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <button id="createEventButton">Create Event</button>
-    <div id="eventForm" style="display:none;">
-        <h2>Create a New Event</h2>
-        <form id="eventForm">
-            <input type="text" id="title" placeholder="Event Title" required>
-            <input type="date" id="date" required>
-            <input type="time" id="time" required>
-            <input type="text" id="location" placeholder="Event Location" required>
-            <button type="submit">Submit</button>
-        </form>
+
+    <!-- Event creation form -->
+    <div id="eventForm" class="form-container" style="display: none">
+      <h2>Create a New Event</h2>
+      <form id="eventCreationForm">
+        <input type="text" id="title" placeholder="Event Title" required />
+        <input type="date" id="date" required />
+        <input type="time" id="time" required />
+        <input type="number" id="nbParticipants" placeholder="Number of Participants" required />
+        <input
+          type="text"
+          id="location"
+          placeholder="Event Location"
+          required
+        />
+        <button type="submit">Submit</button>
+      </form>
     </div>
 
-    <h2>Available Events</h2>
-    <ul id="eventsList"></ul>
-    <!-- add a loop to show a list of all available events : show title, date and time, location -->
-     
+    <!-- Event listing -->
+    <h1>Available Events</h1>
+    <ul id="events-list"></ul>
+
+    <!-- Join event form -->
+    <div id="joinForm" class="form-container" style="display: none">
+      <h2>Join Event</h2>
+      <input type="text" id="name" placeholder="Your Name" required />
+      <input type="email" id="email" placeholder="Your Email" required />
+      <button onclick="submitJoin()">Join Event</button>
+    </div>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
