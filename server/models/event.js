@@ -12,6 +12,12 @@ const eventSchema = new mongoose.Schema({
       email: { type: String, required: true },
     },
   ],
+  waitlist: [
+    {
+      name: { type: String, required: true },
+      email: { type: String, required: true },
+    },
+  ],
 });
 
 module.exports = mongoose.model("Event", eventSchema);

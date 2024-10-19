@@ -16,7 +16,12 @@
         <input type="text" id="title" placeholder="Event Title" required />
         <input type="date" id="date" required />
         <input type="time" id="time" required />
-        <input type="number" id="nbParticipants" placeholder="Number of Participants" required />
+        <input
+          type="number"
+          id="nbParticipants"
+          placeholder="Number of Participants"
+          required
+        />
         <input
           type="text"
           id="location"
@@ -32,11 +37,19 @@
     <ul id="events-list"></ul>
 
     <!-- Join event form -->
-    <div id="joinForm" class="form-container" style="display: none">
+    <div id="joinEventForm" class="form-container" style="display: none">
       <h2>Join Event</h2>
-      <input type="text" id="name" placeholder="Your Name" required />
-      <input type="email" id="email" placeholder="Your Email" required />
-      <button onclick="submitJoin()">Join Event</button>
+      <input type="text" id="nameJoin" placeholder="Your Name" required />
+      <input type="email" id="emailJoin" placeholder="Your Email" required />
+      <button onclick="submitJoinEvent()">Join Event</button>
+    </div>
+
+    <!-- Join waitlist form -->
+    <div id="joinWaitlistForm" class="form-container" style="display: none">
+      <h2>Join Waitlist</h2>
+      <input type="text" id="nameWait" placeholder="Your Name" required />
+      <input type="email" id="emailWait" placeholder="Your Email" required />
+      <button onclick="submitJoinWaitlist()">Join Waitlist</button>
     </div>
 
     <script src="script.js"></script>

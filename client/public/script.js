@@ -58,6 +58,7 @@ async function loadEvents() {
             <p>Participants: ${event.participants.length}/${
           event.nbParticipants
         }</p>
+        <p>Waitlist: ${event.waitlist.length}</p>
           <p>Location: ${event.location}</p>
           <button ${
             isEventFull ? "disabled" : ""
@@ -89,13 +90,13 @@ function showJoinEventForm(eventId) {
 // Show join waitlist form
 function showJoinWaitlistForm(eventId) {
   selectedEventId = eventId;
-  document.getElementById("joinEventForm").style.display = "block";
+  document.getElementById("joinWaitlistForm").style.display = "block";
 }
 
 // Submit the join event form
 function submitJoinEvent() {
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
+  const name = document.getElementById("nameJoin").value;
+  const email = document.getElementById("emailJoin").value;
 
   if (name && email) {
     fetch(`/api/events/${selectedEventId}/join`, {
@@ -115,6 +116,39 @@ function submitJoinEvent() {
       .then((data) => {
         alert("You have joined the event!");
         document.getElementById("joinEventForm").style.display = "none";
+        loadEvents(); // Reload events to reflect participants
+      })
+      .catch((error) => {
+        alert("Error joining event: " + error.message);
+      });
+  } else {
+    alert("Please fill in all fields.");
+  }
+}
+
+// Submit the join waitlist form
+function submitJoinWaitlist() {
+  const name = document.getElementById("nameWait").value;
+  const email = document.getElementById("emailWait").value;
+
+  if (name && email) {
+    fetch(`/api/events/${selectedEventId}/joinWaitlist`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          return response.json().then((data) => {
+            throw new Error(data.message);
+          });
+        }
+      })
+      .then((data) => {
+        alert("You have joined the waitlist!");
+        document.getElementById("joinWaitlistForm").style.display = "none";
         loadEvents(); // Reload events to reflect participants
       })
       .catch((error) => {

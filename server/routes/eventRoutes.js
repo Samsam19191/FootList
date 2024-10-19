@@ -91,6 +91,71 @@ router.post("/:id/join", async (req, res) => {
   }
 });
 
+// Join a waitlist
+router.post("/:id/joinWaitlist", async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    // Add participant to waitlist
+    const participant = {
+      name: req.body.name,
+      email: req.body.email,
+    };
+
+    event.waitlist.push(participant);
+
+    // Save updated event
+    await event.save();
+
+    res.status(200).json({ message: "You have joined the waitlist", event });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// unsubscribe from an event
+router.post("/:eventId/:participantId/unsubscribe", async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.eventId);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    // Find participant
+    const participant = event.participants.id(req.params.participantId);
+    if (!participant) {
+      return res.status(404).json({ message: "Participant not found" });
+    }
+
+    // Remove participant
+    const participantIndex = event.participants.findIndex(
+      (participant) => participant._id.toString() === req.params.participantId
+    );
+
+    if (participantIndex === -1) {
+      return res.status(404).json({ message: "Participant not found" });
+    }
+
+    event.participants.splice(participantIndex, 1);
+
+    // Add first participant from waitlist
+    if (event.waitlist.length > 0) {
+      const firstWaitlistParticipant = event.waitlist.shift();
+      event.participants.push(firstWaitlistParticipant);
+    }
+
+    // Save updated event
+    await event.save();
+
+    res.json({ message: "You have unsubscribed from the event" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // delete all events
 router.delete("/", async (req, res) => {
   try {
