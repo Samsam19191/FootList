@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Event = require("../models/event");
+const { sendConfirmationEmail } = require("../utils/emailService");
 
 // Get all events
 router.get("/", async (req, res) => {
@@ -83,7 +84,12 @@ router.post("/:id/join", async (req, res) => {
     event.participants.push(participant);
 
     // Save updated event
-    await event.save();
+    const savedEvent = await event.save();
+
+    // Send confirmation email
+    const newParticipant =
+      savedEvent.participants[savedEvent.participants.length - 1];
+    await sendConfirmationEmail(newParticipant, savedEvent);
 
     res.status(200).json({ message: "You have joined the event", event });
   } catch (error) {
@@ -116,8 +122,8 @@ router.post("/:id/joinWaitlist", async (req, res) => {
   }
 });
 
-// unsubscribe from an event
-router.post("/:eventId/:participantId/unsubscribe", async (req, res) => {
+// cancel participation
+router.get("/:eventId/:participantId/cancel", async (req, res) => {
   try {
     const event = await Event.findById(req.params.eventId);
     if (!event) {
@@ -145,12 +151,13 @@ router.post("/:eventId/:participantId/unsubscribe", async (req, res) => {
     if (event.waitlist.length > 0) {
       const firstWaitlistParticipant = event.waitlist.shift();
       event.participants.push(firstWaitlistParticipant);
+      sendConfirmationEmail(firstWaitlistParticipant, event, true);
     }
 
     // Save updated event
     await event.save();
 
-    res.json({ message: "You have unsubscribed from the event" });
+    res.json({ message: "You have canceled your participation" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
