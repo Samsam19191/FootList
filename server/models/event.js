@@ -9,7 +9,7 @@ const eventSchema = new mongoose.Schema({
   participants: [
     {
       name: { type: String, required: true },
-      email: { type: String, required: true, unique: true },
+      email: { type: String, required: true },
     },
   ],
   waitlist: [
@@ -18,6 +18,29 @@ const eventSchema = new mongoose.Schema({
       email: { type: String, required: true },
     },
   ],
+});
+
+// Pre-save middleware to enforce unique email addresses for participants
+eventSchema.pre("save", function (next) {
+  const event = this;
+
+  // Get all participant and waitlist emails
+  const emails = [
+    ...event.participants.map((p) => p.email),
+    ...event.waitlist.map((w) => w.email),
+  ];
+
+  // Check for duplicates in the participants array
+  const uniqueEmails = new Set(emails);
+  if (uniqueEmails.size !== emails.length) {
+    return next(
+      new Error(
+        "Duplicate email addresses are not allowed for participants in this event"
+      )
+    );
+  }
+
+  next();
 });
 
 module.exports = mongoose.model("Event", eventSchema);

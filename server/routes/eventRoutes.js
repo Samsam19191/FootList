@@ -75,10 +75,21 @@ router.post("/:id/join", async (req, res) => {
       return res.status(400).json({ message: "Event is full" });
     }
 
+    const { name, email } = req.body;
+
+    const emailExists = event.participants.some(
+      (participant) => participant.email === email
+    );
+    if (emailExists) {
+      return res
+        .status(400)
+        .json({ message: "This email is already registered for the event." });
+    }
+
     // Add participant
     const participant = {
-      name: req.body.name,
-      email: req.body.email,
+      name: name,
+      email: email,
     };
 
     event.participants.push(participant);
