@@ -1,7 +1,26 @@
-// Event creation form toggle
-document.getElementById("createEventButton").addEventListener("click", () => {
-  document.getElementById("eventForm").style.display = "block";
-});
+// Toggle the display of the event creation form
+function toggleEventForm() {
+  const eventForm = document.getElementById("eventForm");
+  eventForm.style.display =
+    eventForm.style.display === "none" ? "block" : "none";
+}
+
+// function toggleEventForm() {
+//   const eventForm = document.getElementById("eventForm");
+//   if (eventForm.style.display === "none") {
+//     eventForm.style.display = "block";
+//     // Trigger reflow to enable the animation
+//     void eventForm.offsetWidth; // This line forces a reflow
+//     eventForm.classList.add("fade-in");
+//   } else {
+//     eventForm.classList.remove("fade-in");
+//     eventForm.style.opacity = 0; // Set opacity to 0 for closing animation
+//     setTimeout(() => {
+//       eventForm.style.display = "none"; // Hide after animation
+//       eventForm.style.opacity = 1; // Reset opacity for next opening
+//     }, 300); // Adjust this duration to match your CSS transition duration
+//   }
+// }
 
 // Form submit event for creating a new event
 document
@@ -60,14 +79,14 @@ async function loadEvents() {
         }</p>
         <p>Waitlist: ${event.waitlist.length}</p>
           <p>Location: ${event.location}</p>
-          <button ${
+          <button class="btn btn-primary mb-3" ${
             isEventFull ? "disabled" : ""
-          } onclick="showJoinEventForm('${event._id}')">${
+          } onclick="toggleJoinEventForm('${event._id}')">${
           isEventFull ? "Event is Full" : "Join Event"
         }</button>
         ${
           isEventFull
-            ? `<button onclick="showJoinWaitlistForm('${event._id}')">Join Waitlist</button>`
+            ? `<button class="btn btn-primary mb-3" onclick="toggleJoinWaitlistForm('${event._id}')">Join Waitlist</button>`
             : ""
         }
         `;
@@ -81,16 +100,20 @@ async function loadEvents() {
   }
 }
 
-// Show join event form
-function showJoinEventForm(eventId) {
+// toggle join event form
+function toggleJoinEventForm(eventId) {
   selectedEventId = eventId;
-  document.getElementById("joinEventForm").style.display = "block";
+  joinEventForm = document.getElementById("joinEventForm");
+  joinEventForm.style.display =
+    joinEventForm.style.display === "none" ? "block" : "none";
 }
 
-// Show join waitlist form
-function showJoinWaitlistForm(eventId) {
+// toggle join waitlist form
+function toggleJoinWaitlistForm(eventId) {
   selectedEventId = eventId;
-  document.getElementById("joinWaitlistForm").style.display = "block";
+  joinWaitlistForm = document.getElementById("joinWaitlistForm");
+  joinWaitlistForm.style.display =
+    joinWaitlistForm.style.display === "none" ? "block" : "none";
 }
 
 // Submit the join event form

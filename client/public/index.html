@@ -4,52 +4,115 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JoinIn</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body>
-    <button id="createEventButton">Create Event</button>
+  <body class="container mt-5">
+    <button
+      id="createEventButton"
+      class="btn btn-primary mb-3"
+      onclick="toggleEventForm()"
+    >
+      Create Event
+    </button>
 
     <!-- Event creation form -->
-    <div id="eventForm" class="form-container" style="display: none">
+    <div
+      id="eventForm"
+      class="form-container card p-4 mb-4 animated"
+      style="display: none"
+    >
       <h2>Create a New Event</h2>
+      <button class="close-icon" onclick="toggleEventForm()">&times;</button>
       <form id="eventCreationForm">
-        <input type="text" id="title" placeholder="Event Title" required />
-        <input type="date" id="date" required />
-        <input type="time" id="time" required />
+        <input
+          type="text"
+          class="form-control mb-2"
+          id="title"
+          placeholder="Event Title"
+          required
+        />
+        <input type="date" class="form-control mb-2" id="date" required />
+        <input type="time" class="form-control mb-2" id="time" required />
         <input
           type="number"
+          class="form-control mb-2"
           id="nbParticipants"
           placeholder="Number of Participants"
           required
         />
         <input
           type="text"
+          class="form-control mb-2"
           id="location"
           placeholder="Event Location"
           required
         />
-        <button type="submit">Submit</button>
+        <button type="submit" class="btn btn-success">Submit</button>
       </form>
     </div>
 
     <!-- Event listing -->
     <h1>Available Events</h1>
-    <ul id="events-list"></ul>
+    <ul id="events-list" class="list-group mb-4"></ul>
 
     <!-- Join event form -->
-    <div id="joinEventForm" class="form-container" style="display: none">
+    <div
+      id="joinEventForm"
+      class="form-container card p-4 mb-4 animated"
+      style="display: none"
+    >
       <h2>Join Event</h2>
-      <input type="text" id="nameJoin" placeholder="Your Name" required />
-      <input type="email" id="emailJoin" placeholder="Your Email" required />
-      <button onclick="submitJoinEvent()">Join Event</button>
+      <button class="close-icon" onclick="toggleJoinEventForm()">
+        &times;
+      </button>
+      <input
+        type="text"
+        class="form-control mb-2"
+        id="nameJoin"
+        placeholder="Your Name"
+        required
+      />
+      <input
+        type="email"
+        class="form-control mb-2"
+        id="emailJoin"
+        placeholder="Your Email"
+        required
+      />
+      <button onclick="submitJoinEvent()" class="btn btn-primary">Join</button>
     </div>
 
     <!-- Join waitlist form -->
-    <div id="joinWaitlistForm" class="form-container" style="display: none">
+    <div
+      id="joinWaitlistForm"
+      class="form-container card p-4 mb-4 animated"
+      style="display: none"
+    >
       <h2>Join Waitlist</h2>
-      <input type="text" id="nameWait" placeholder="Your Name" required />
-      <input type="email" id="emailWait" placeholder="Your Email" required />
-      <button onclick="submitJoinWaitlist()">Join Waitlist</button>
+      <button class="close-icon" onclick="toggleJoinWaitlistForm()">
+        &times;
+      </button>
+      <input
+        type="text"
+        class="form-control mb-2"
+        id="nameWait"
+        placeholder="Your Name"
+        required
+      />
+      <input
+        type="email"
+        class="form-control mb-2"
+        id="emailWait"
+        placeholder="Your Email"
+        required
+      />
+      <button onclick="submitJoinWaitlist()" class="btn btn-primary">
+        Join
+      </button>
     </div>
 
     <script src="script.js"></script>
