@@ -5,23 +5,6 @@ function toggleEventForm() {
     eventForm.style.display === "none" ? "block" : "none";
 }
 
-// function toggleEventForm() {
-//   const eventForm = document.getElementById("eventForm");
-//   if (eventForm.style.display === "none") {
-//     eventForm.style.display = "block";
-//     // Trigger reflow to enable the animation
-//     void eventForm.offsetWidth; // This line forces a reflow
-//     eventForm.classList.add("fade-in");
-//   } else {
-//     eventForm.classList.remove("fade-in");
-//     eventForm.style.opacity = 0; // Set opacity to 0 for closing animation
-//     setTimeout(() => {
-//       eventForm.style.display = "none"; // Hide after animation
-//       eventForm.style.opacity = 1; // Reset opacity for next opening
-//     }, 300); // Adjust this duration to match your CSS transition duration
-//   }
-// }
-
 // Form submit event for creating a new event
 document
   .getElementById("eventCreationForm")
@@ -69,27 +52,59 @@ async function loadEvents() {
       events.forEach((event) => {
         const eventDiv = document.createElement("li");
         const isEventFull = event.participants.length >= event.nbParticipants;
-
         eventDiv.innerHTML = `
-          <h3>${event.title}</h3>
-          <p>Date: ${new Date(event.date).toLocaleDateString()}</p>
-          <p>Time: ${event.time}</p>
-            <p>Participants: ${event.participants.length}/${
-          event.nbParticipants
-        }</p>
-        <p>Waitlist: ${event.waitlist.length}</p>
-          <p>Location: ${event.location}</p>
-          <button class="btn btn-primary mb-3" ${
-            isEventFull ? "disabled" : ""
-          } onclick="toggleJoinEventForm('${event._id}')">${
+  <h3>${event.title}</h3>
+  <p>Date: ${new Date(event.date).toLocaleDateString()}</p>
+  <p>Time: ${event.time}</p>
+  <p>Location: ${event.location}</p>
+  
+  <!-- Toggle participants button -->
+  <p>
+    Participants: ${event.participants.length}/${event.nbParticipants}
+    <button style="display: ${
+      event.participants.length === 0 ? "none" : "block"
+    };" class="btn btn-link p-0" onclick="toggleParticipantsList('${
+          event._id
+        }')">
+      (Show/Hide)
+    </button>
+  </p>
+  
+  <!-- Hidden participants list -->
+  <ul id="participants-list-${event._id}" style="display: none;">
+    ${event.participants
+      .map((participant) => `<li>${participant.name}</li>`)
+      .join("")}
+  </ul>
+
+  <p>Waitlist: ${event.waitlist.length}
+  <button style="display: ${
+    event.waitlist.length === 0 ? "none" : "block"
+  };" class="btn btn-link p-0" onclick="toggleWaitlist('${event._id}')">
+      (Show/Hide)
+    </button></p>
+
+    <!-- Hidden waitlist -->
+  <ul id="waitlist-${event._id}" style="display: none;">
+    ${event.waitlist
+      .map((participant) => `<li>${participant.name}</li>`)
+      .join("")}
+  </ul>
+  
+  <!-- Join event button -->
+  <button class="btn btn-primary mb-3" ${
+    isEventFull ? "disabled" : ""
+  } onclick="toggleJoinEventForm('${event._id}')">${
           isEventFull ? "Event is Full" : "Join Event"
         }</button>
-        ${
-          isEventFull
-            ? `<button class="btn btn-primary mb-3" onclick="toggleJoinWaitlistForm('${event._id}')">Join Waitlist</button>`
-            : ""
-        }
-        `;
+  
+  <!-- Join waitlist button -->
+  ${
+    isEventFull
+      ? `<button class="btn btn-primary mb-3" onclick="toggleJoinWaitlistForm('${event._id}')">Join Waitlist</button>`
+      : ""
+  }
+`;
         eventsListDiv.appendChild(eventDiv);
       });
     } else {
@@ -100,26 +115,79 @@ async function loadEvents() {
   }
 }
 
-// toggle join event form
-function toggleJoinEventForm(eventId) {
-  selectedEventId = eventId;
-  joinEventForm = document.getElementById("joinEventForm");
-  joinEventForm.style.display =
-    joinEventForm.style.display === "none" ? "block" : "none";
+// Toggle the display of the participants list
+function toggleParticipantsList(eventId) {
+  const participantsList = document.getElementById(
+    `participants-list-${eventId}`
+  );
+  participantsList.style.display =
+    participantsList.style.display === "none" ? "block" : "none";
 }
 
-// toggle join waitlist form
+// Toggle the display of the waitlist
+function toggleWaitlist(eventId) {
+  const waitlist = document.getElementById(`waitlist-${eventId}`);
+  waitlist.style.display = waitlist.style.display === "none" ? "block" : "none";
+}
+
+// toggle join event form modal
+function toggleJoinEventForm(eventId) {
+  selectedEventId = eventId;
+  const modal = document.getElementById("joinEventModal");
+  if (modal.classList.contains("show")) {
+    modal.classList.remove("show");
+    setTimeout(() => {
+      modal.style.display = "none";
+    }, 300); // Match the transition duration
+  } else {
+    modal.style.display = "block";
+    setTimeout(() => {
+      modal.classList.add("show");
+    }, 10); // Slight delay to trigger the transition
+  }
+}
+
+// toggle join waitlist form modal
 function toggleJoinWaitlistForm(eventId) {
   selectedEventId = eventId;
-  joinWaitlistForm = document.getElementById("joinWaitlistForm");
-  joinWaitlistForm.style.display =
-    joinWaitlistForm.style.display === "none" ? "block" : "none";
+  const modal = document.getElementById("joinWaitlistModal");
+  if (modal.classList.contains("show")) {
+    modal.classList.remove("show");
+    setTimeout(() => {
+      modal.style.display = "none";
+    }, 300); // Match the transition duration
+  } else {
+    modal.style.display = "block";
+    setTimeout(() => {
+      modal.classList.add("show");
+    }, 10); // Slight delay to trigger the transition
+  }
 }
+
+// Close the modal when the user clicks anywhere outside of the modal
+window.onclick = function (event) {
+  if (document.getElementById("joinWaitlistModal").style.display === "block") {
+    const modal = document.getElementById("joinWaitlistModal");
+    if (event.target === modal) {
+      toggleJoinWaitlistForm();
+    }
+  } else {
+    const modal = document.getElementById("joinEventModal");
+    if (event.target === modal) {
+      toggleJoinEventForm();
+    }
+  }
+};
 
 // Submit the join event form
 function submitJoinEvent() {
   const name = document.getElementById("nameJoin").value;
   const email = document.getElementById("emailJoin").value;
+  const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+  if (!emailPattern.test(email)) {
+    alert("Please enter a valid email address.");
+    return;
+  }
 
   if (name && email) {
     fetch(`/api/events/${selectedEventId}/join`, {
@@ -138,7 +206,7 @@ function submitJoinEvent() {
       })
       .then((data) => {
         alert("You have joined the event!");
-        document.getElementById("joinEventForm").style.display = "none";
+        document.getElementById("joinEventModal").style.display = "none";
         loadEvents(); // Reload events to reflect participants
       })
       .catch((error) => {
@@ -153,6 +221,11 @@ function submitJoinEvent() {
 function submitJoinWaitlist() {
   const name = document.getElementById("nameWait").value;
   const email = document.getElementById("emailWait").value;
+  const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+  if (!emailPattern.test(email)) {
+    alert("Please enter a valid email address.");
+    return;
+  }
 
   if (name && email) {
     fetch(`/api/events/${selectedEventId}/joinWaitlist`, {
@@ -171,7 +244,7 @@ function submitJoinWaitlist() {
       })
       .then((data) => {
         alert("You have joined the waitlist!");
-        document.getElementById("joinWaitlistForm").style.display = "none";
+        document.getElementById("joinWaitlistModal").style.display = "none";
         loadEvents(); // Reload events to reflect participants
       })
       .catch((error) => {

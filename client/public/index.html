@@ -59,62 +59,69 @@
     <h1>Available Events</h1>
     <ul id="events-list" class="list-group mb-4"></ul>
 
-    <!-- Join event form -->
-    <div
-      id="joinEventForm"
-      class="form-container card p-4 mb-4 animated"
-      style="display: none"
-    >
-      <h2>Join Event</h2>
-      <button class="close-icon" onclick="toggleJoinEventForm()">
-        &times;
-      </button>
-      <input
-        type="text"
-        class="form-control mb-2"
-        id="nameJoin"
-        placeholder="Your Name"
-        required
-      />
-      <input
-        type="email"
-        class="form-control mb-2"
-        id="emailJoin"
-        placeholder="Your Email"
-        required
-      />
-      <button onclick="submitJoinEvent()" class="btn btn-primary">Join</button>
+    <!-- Join event form modal -->
+    <div id="joinEventModal" class="modal">
+      <div class="modal-content">
+        <button class="close-icon" onclick="toggleJoinEventForm()">
+          &times;
+        </button>
+        <h2>Join Event</h2>
+        <input
+          type="text"
+          class="form-control mb-2"
+          id="nameJoin"
+          placeholder="Your Name"
+          required
+        />
+        <input
+          type="email"
+          class="form-control mb-2"
+          id="emailJoin"
+          placeholder="Your Email"
+          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+          required
+        />
+        <button
+          type="button"
+          class="btn btn-primary"
+          onclick="submitJoinEvent()"
+        >
+          Join
+        </button>
+      </div>
     </div>
 
-    <!-- Join waitlist form -->
-    <div
-      id="joinWaitlistForm"
-      class="form-container card p-4 mb-4 animated"
-      style="display: none"
-    >
-      <h2>Join Waitlist</h2>
-      <button class="close-icon" onclick="toggleJoinWaitlistForm()">
-        &times;
-      </button>
-      <input
-        type="text"
-        class="form-control mb-2"
-        id="nameWait"
-        placeholder="Your Name"
-        required
-      />
-      <input
-        type="email"
-        class="form-control mb-2"
-        id="emailWait"
-        placeholder="Your Email"
-        required
-      />
-      <button onclick="submitJoinWaitlist()" class="btn btn-primary">
-        Join
-      </button>
+    <!-- Join waitlist form modal -->
+    <div id="joinWaitlistModal" class="modal">
+      <div class="modal-content">
+        <button class="close-icon" onclick="toggleJoinWaitlistForm()">
+          &times;
+        </button>
+        <h2>Join Waitlist</h2>
+        <input
+          type="text"
+          class="form-control mb-2"
+          id="nameWait"
+          placeholder="Your Name"
+          required
+        />
+        <input
+          type="email"
+          class="form-control mb-2"
+          id="emailWait"
+          placeholder="Your Email"
+          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+          required
+        />
+        <button
+          type="button"
+          class="btn btn-primary"
+          onclick="submitJoinWaitlist()"
+        >
+          Join
+        </button>
+      </div>
     </div>
-
     <script src="script.js"></script>
   </body>
 </html>
